@@ -20,6 +20,13 @@ const UP_mask=Vector3(1,0,1)
 
 export(NodePath) var target setget set_target
 export(NodePath) var navigation setget set_navigation
+
+export(NodePath) var debug_target_status 
+export(NodePath) var debug_state 
+export(NodePath) var debug_offset
+export(NodePath) var debug_direction
+
+
 var current_target_ref=null
 var navmesh=null
 
@@ -148,6 +155,7 @@ func do_current_action(state):
 		diff += vertdiff; # vertical velocity is put back
 		if not no_move :
 			apply_impulse(Vector3(), diff * get_mass())
+			pass
 	else:
 		# is falling
 		apply_impulse(Vector3(), Vector3() * air_accel * get_mass());
@@ -155,10 +163,12 @@ func do_current_action(state):
 	# set rotation
 	
 	if leg_ray.is_colliding():
+		
 		var target_z
 		if current_action.follow_target:
 			# when attacking, the npc always face the target
 			target_z=target_ray.get_global_transform().basis.z
+
 		else:
 			if current_waypoint!=null:
 				var offset=Vector3(0,0,0)
@@ -172,6 +182,7 @@ func do_current_action(state):
 		var vx=Vector2(current_z.x,current_z.z).angle_to(Vector2(target_z.x,target_z.z))
 		
 		if not current_action.follow_target:
+			
 			var gs_left=check_ground_sensor(ground_sensor_l)
 			var gs_right=check_ground_sensor(ground_sensor_r)
 			var is_new_hole_l=gs_left and !old_sensor_status_l
@@ -189,6 +200,7 @@ func do_current_action(state):
 				new_vx=PI
 				calculate_destination()
 				fsm_action.set_state("turn")
+				
 				state.set_linear_velocity(Vector3(0,0,0))
 				if dynamic_speed:
 					current_speed=max(current_speed-turn_speed_deccel,1)
@@ -211,7 +223,10 @@ func do_current_action(state):
 		if not (abs(vx)<0.5):
 			vx=sign(vx)
 		
-		state.set_angular_velocity(Vector3(0,vx*ANGULAR_SPEED,0))
+		state.set_angular_velocity(Vector3(0,vx*-ANGULAR_SPEED,0))
+		
+		
+
 	
 	state.integrate_forces();
 	
@@ -228,7 +243,7 @@ func calculate_destination(force_recalculate=false):
 	var offset=Vector3(0,0,0)
 	if get_target():
 		offset=get_target_offset(get_target())
-	
+		set_debug_label(debug_offset, "Offset: " + String(offset))
 	if get_target() and navmesh!=null:
 		var did_reach_wpt=current_waypoint!=null and (current_waypoint-get_translation()).length()<WAYPOINT_ERROR_DELTA
 		if force_recalculate or current_waypoint==null or did_reach_wpt or waypoint_timeout<=0:
@@ -237,8 +252,10 @@ func calculate_destination(force_recalculate=false):
 		var curr_pos
 		if get_target():
 			curr_pos=get_target().get_global_transform().origin
+			set_debug_label(debug_target_status, "Target: Tracking '"+ get_target().name + "' " + String(curr_pos) )
 		else:
-			 curr_pos=get_waypoint_no_target()
+			set_debug_label(debug_target_status, "Target: Not Tracking")
+			curr_pos=get_waypoint_no_target()
 		
 		if navmesh!=null:
 			current_waypoint=navmesh.get_closest_point(curr_pos)
@@ -248,7 +265,8 @@ func calculate_destination(force_recalculate=false):
 	
 	var old_direction=current_direction
 	current_direction=get_global_transform().looking_at(current_waypoint+offset,UP).orthonormalized().basis.z
-	if (current_direction+old_direction).length()<1.2:
+	set_debug_label(debug_direction, "Current Direction: " + String(current_direction))
+	if (current_direction+old_direction).length()< 1.2:
 		fsm_action.set_state("turn")
 		if dynamic_speed:
 			current_speed=max(current_speed-turn_speed_deccel,1)
@@ -361,6 +379,7 @@ func check_ground_sensor(sensor):
 		return true
 
 func _action_state_changed(state_from,state_to,params):
+	set_debug_label(debug_state, "State: [" + state_from + "] -> [" + state_to + "]")
 	if state_to=="move":
 		calculate_destination()
 	
@@ -404,6 +423,15 @@ func get_target():
 			current_target_ref=null
 		
 	return result
+	
+func set_debug_label(label_nodepath, text):
+	if(label_nodepath==null):
+		return
+		
+	var lbl = get_node(label_nodepath) 
+	if(lbl!=null):
+		lbl.text = text
+	
 
 func set_navigation(n):
 	navigation=n

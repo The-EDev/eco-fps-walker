@@ -2,7 +2,7 @@
 
 [ext_resource path="res://addons/eco.fps.walker/walker_core.tscn" type="PackedScene" id=1]
 
-[sub_resource type="SpatialMaterial" id=10]
+[sub_resource type="SpatialMaterial" id=1]
 
 render_priority = 0
 flags_transparent = false
@@ -53,14 +53,14 @@ uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
 
-[sub_resource type="CubeMesh" id=11]
+[sub_resource type="CubeMesh" id=2]
 
 size = Vector3( 2, 2, 2 )
 subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="SpatialMaterial" id=12]
+[sub_resource type="SpatialMaterial" id=3]
 
 render_priority = 0
 flags_transparent = false
@@ -111,19 +111,19 @@ uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
 
-[sub_resource type="CubeMesh" id=13]
+[sub_resource type="CubeMesh" id=4]
 
 size = Vector3( 2, 2, 2 )
 subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="PlaneShape" id=14]
+[sub_resource type="PlaneShape" id=5]
 
 plane = Plane( 0, 1, 0, 0 )
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="SpatialMaterial" id=17]
+[sub_resource type="SpatialMaterial" id=6]
 
 render_priority = 0
 flags_transparent = false
@@ -179,12 +179,12 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Emission" ]
 
-[sub_resource type="QuadMesh" id=16]
+[sub_resource type="QuadMesh" id=7]
 
-material = SubResource( 17 )
+material = SubResource( 6 )
 size = Vector2( 100, 100 )
 
-[sub_resource type="Environment" id=15]
+[sub_resource type="Environment" id=8]
 
 background_mode = 0
 background_sky_custom_fov = 0.0
@@ -318,7 +318,7 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo", "Emission" ]
 
-[sub_resource type="CubeMesh" id=8]
+[sub_resource type="CubeMesh" id=10]
 
 material = SubResource( 9 )
 size = Vector3( 2, 2, 2 )
@@ -333,23 +333,21 @@ _sections_unfolded = [ "Transform", "Visibility" ]
 [node name="npc" parent="." index="0" instance=ExtResource( 1 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.27983, 0 )
-axis_lock_linear_x = false
-axis_lock_linear_y = false
-axis_lock_linear_z = false
-axis_lock_angular_x = false
-axis_lock_angular_y = false
-axis_lock_angular_z = false
-linear_damp = -1.0
-angular_damp = -1.0
+mode = 0
+_sections_unfolded = [ "Angular", "Linear" ]
 debug_path = NodePath("")
 debug_wpt = NodePath("")
 target = NodePath("../target")
+debug_target_status = NodePath("../DebugUI/TargetStatusLabel")
+debug_state = NodePath("../DebugUI/StateLabel")
+debug_offset = NodePath("../DebugUI/OffsetLabel")
+debug_direction = NodePath("../DebugUI/DirectionLabel")
 
 [node name="TestCube" type="MeshInstance" parent="npc" index="6"]
 
 transform = Transform( 0.237504, 0, 0, 0, 0.237504, 0, 0, 0, 0.237504, 0, 0.445426, 0 )
 layers = 1
-material_override = SubResource( 10 )
+material_override = SubResource( 1 )
 cast_shadow = 1
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -357,7 +355,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 11 )
+mesh = SubResource( 2 )
 skeleton = NodePath("..")
 material/0 = null
 
@@ -365,7 +363,7 @@ material/0 = null
 
 transform = Transform( 0.039546, 0, 0, 0, 0.039546, 0, 0, 0, 1, 0, 0.445426, -1.21137 )
 layers = 1
-material_override = SubResource( 12 )
+material_override = SubResource( 3 )
 cast_shadow = 1
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -373,7 +371,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 13 )
+mesh = SubResource( 4 )
 skeleton = NodePath("..")
 material/0 = null
 
@@ -390,13 +388,13 @@ constant_angular_velocity = Vector3( 0, 0, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
 
-shape = SubResource( 14 )
+shape = SubResource( 5 )
 disabled = false
 
 [node name="CollisionShape1" type="CollisionShape" parent="StaticBody" index="1"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )
-shape = SubResource( 14 )
+shape = SubResource( 5 )
 disabled = false
 
 [node name="Quad" type="MeshInstance" parent="StaticBody" index="2"]
@@ -411,14 +409,14 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 16 )
+mesh = SubResource( 7 )
 skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform" ]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="2"]
 
-environment = SubResource( 15 )
+environment = SubResource( 8 )
 
 [node name="Camera" type="Camera" parent="." index="3"]
 
@@ -448,9 +446,112 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 8 )
+mesh = SubResource( 10 )
 skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Geometry", "LOD", "Transform", "Visibility", "material" ]
+
+[node name="DebugUI" type="Control" parent="." index="5"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 40.0
+margin_bottom = 40.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+
+[node name="TargetStatusLabel" type="Label" parent="DebugUI" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 50.0
+margin_top = 50.0
+margin_right = 40.0
+margin_bottom = 14.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Target:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Margin" ]
+
+[node name="StateLabel" type="Label" parent="DebugUI" index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 50.0
+margin_top = 70.0
+margin_right = 40.0
+margin_bottom = 14.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "State: "
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Margin" ]
+
+[node name="OffsetLabel" type="Label" parent="DebugUI" index="2"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 50.0
+margin_top = 90.0
+margin_right = 40.0
+margin_bottom = 14.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Offset:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Margin" ]
+
+[node name="DirectionLabel" type="Label" parent="DebugUI" index="3"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 50.0
+margin_top = 110.0
+margin_right = 40.0
+margin_bottom = 14.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Direction: "
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Margin" ]
 
 
