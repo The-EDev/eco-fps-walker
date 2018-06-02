@@ -354,8 +354,8 @@ func _update_waypoint(target_coord,reached_wpt):
 func check_ground_sensor(sensor):
 	if sensor.is_colliding():
 		var dot=abs(UP.dot(sensor.get_collision_normal()))
-		var len=sensor.get_global_transform().origin.distance_to(sensor.get_collision_point())
-		return dot < 0.4 or (dot==1 and len>4)
+		var dist = sensor.get_global_transform().origin.distance_to(sensor.get_collision_point())
+		return dot < 0.4 or (dot==1 and dist>4)
 	else:
 		return true
 
