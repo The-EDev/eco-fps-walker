@@ -1,8 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://addons/eco.fps.walker/walker_core.tscn" type="PackedScene" id=1]
 
-[sub_resource type="SpatialMaterial" id=1]
+[sub_resource type="SpatialMaterial" id=10]
 
 render_priority = 0
 flags_transparent = false
@@ -53,7 +53,14 @@ uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
 
-[sub_resource type="SpatialMaterial" id=2]
+[sub_resource type="CubeMesh" id=11]
+
+size = Vector3( 2, 2, 2 )
+subdivide_width = 0
+subdivide_height = 0
+subdivide_depth = 0
+
+[sub_resource type="SpatialMaterial" id=12]
 
 render_priority = 0
 flags_transparent = false
@@ -104,11 +111,80 @@ uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
 
-[sub_resource type="PlaneShape" id=3]
+[sub_resource type="CubeMesh" id=13]
+
+size = Vector3( 2, 2, 2 )
+subdivide_width = 0
+subdivide_height = 0
+subdivide_depth = 0
+
+[sub_resource type="PlaneShape" id=14]
 
 plane = Plane( 0, 1, 0, 0 )
+_sections_unfolded = [ "Resource" ]
 
-[sub_resource type="Environment" id=4]
+[sub_resource type="SpatialMaterial" id=17]
+
+render_priority = 0
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = false
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 0
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 0
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 0
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 1, 1, 1, 1 )
+metallic = 0.0
+metallic_specular = 0.5
+metallic_texture_channel = 0
+roughness = 0.0
+roughness_texture_channel = 0
+emission_enabled = true
+emission = Color( 0, 0.477753, 0.605469, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = false
+depth_enabled = false
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_enable = false
+_sections_unfolded = [ "Emission" ]
+
+[sub_resource type="QuadMesh" id=16]
+
+material = SubResource( 17 )
+size = Vector2( 100, 100 )
+
+[sub_resource type="Environment" id=15]
 
 background_mode = 0
 background_sky_custom_fov = 0.0
@@ -186,7 +262,7 @@ adjustment_brightness = 1.0
 adjustment_contrast = 1.0
 adjustment_saturation = 1.0
 
-[sub_resource type="SpatialMaterial" id=5]
+[sub_resource type="SpatialMaterial" id=9]
 
 render_priority = 0
 flags_transparent = false
@@ -209,13 +285,17 @@ params_point_size = 1.0
 params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
-albedo_color = Color( 1, 1, 1, 1 )
+albedo_color = Color( 1, 0, 0, 1 )
 metallic = 0.0
 metallic_specular = 0.5
 metallic_texture_channel = 0
 roughness = 0.0
 roughness_texture_channel = 0
-emission_enabled = false
+emission_enabled = true
+emission = Color( 1, 0, 0, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
 normal_enabled = false
 rim_enabled = false
 clearcoat_enabled = false
@@ -236,8 +316,19 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
+_sections_unfolded = [ "Albedo", "Emission" ]
+
+[sub_resource type="CubeMesh" id=8]
+
+material = SubResource( 9 )
+size = Vector3( 2, 2, 2 )
+subdivide_width = 0
+subdivide_height = 0
+subdivide_depth = 0
 
 [node name="world" type="Spatial" index="0"]
+
+_sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="npc" parent="." index="0" instance=ExtResource( 1 )]
 
@@ -250,12 +341,15 @@ axis_lock_angular_y = false
 axis_lock_angular_z = false
 linear_damp = -1.0
 angular_damp = -1.0
+debug_path = NodePath("")
+debug_wpt = NodePath("")
+target = NodePath("../target")
 
 [node name="TestCube" type="MeshInstance" parent="npc" index="6"]
 
 transform = Transform( 0.237504, 0, 0, 0, 0.237504, 0, 0, 0, 0.237504, 0, 0.445426, 0 )
 layers = 1
-material_override = SubResource( 1 )
+material_override = SubResource( 10 )
 cast_shadow = 1
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -263,14 +357,15 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = null
+mesh = SubResource( 11 )
 skeleton = NodePath("..")
+material/0 = null
 
 [node name="TestCube1" type="MeshInstance" parent="npc" index="7"]
 
 transform = Transform( 0.039546, 0, 0, 0, 0.039546, 0, 0, 0, 1, 0, 0.445426, -1.21137 )
 layers = 1
-material_override = SubResource( 2 )
+material_override = SubResource( 12 )
 cast_shadow = 1
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -278,8 +373,9 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = null
+mesh = SubResource( 13 )
 skeleton = NodePath("..")
+material/0 = null
 
 [node name="StaticBody" type="StaticBody" parent="." index="1"]
 
@@ -294,18 +390,35 @@ constant_angular_velocity = Vector3( 0, 0, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
 
-shape = SubResource( 3 )
+shape = SubResource( 14 )
 disabled = false
 
 [node name="CollisionShape1" type="CollisionShape" parent="StaticBody" index="1"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 14 )
 disabled = false
+
+[node name="Quad" type="MeshInstance" parent="StaticBody" index="2"]
+
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 16 )
+skeleton = NodePath("..")
+material/0 = null
+_sections_unfolded = [ "Transform" ]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="2"]
 
-environment = SubResource( 4 )
+environment = SubResource( 15 )
 
 [node name="Camera" type="Camera" parent="." index="3"]
 
@@ -327,7 +440,7 @@ far = 100.0
 
 transform = Transform( 0.154421, 0, 0, 0, 1, 0, 0, 0, 0.154421, -5.33547, 0.849218, 3.0288 )
 layers = 1
-material_override = SubResource( 5 )
+material_override = null
 cast_shadow = 1
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -335,7 +448,9 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = null
+mesh = SubResource( 8 )
 skeleton = NodePath("..")
+material/0 = null
+_sections_unfolded = [ "Geometry", "LOD", "Transform", "Visibility", "material" ]
 
 

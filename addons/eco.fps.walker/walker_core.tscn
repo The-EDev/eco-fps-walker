@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/eco.fps.walker/walker_core.gd" type="Script" id=1]
 
@@ -13,16 +13,8 @@ radius = 0.3
 
 [node name="npc" type="RigidBody"]
 
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 input_ray_pickable = true
 input_capture_on_drag = false
-shape_count = 2
-shapes/0/shape = SubResource( 1 )
-shapes/0/transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.6, 0 )
-shapes/0/trigger = false
-shapes/1/shape = SubResource( 2 )
-shapes/1/transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0 )
-shapes/1/trigger = false
 collision_layer = 1
 collision_mask = 1
 mode = 2
@@ -36,11 +28,16 @@ contacts_reported = 8
 contact_monitor = true
 sleeping = false
 can_sleep = false
-axis_lock = 0
+axis_lock_linear_x = false
+axis_lock_linear_y = false
+axis_lock_linear_z = false
+axis_lock_angular_x = false
+axis_lock_angular_y = false
+axis_lock_angular_z = false
 linear_velocity = Vector3( 0, 0, 0 )
+linear_damp = -1.0
 angular_velocity = Vector3( 0, 0, 0 )
-damp_override/linear = -1.0
-damp_override/angular = -1.0
+angular_damp = -1.0
 script = ExtResource( 1 )
 __meta__ = {
 "__editor_plugin_screen__": "Script"
@@ -61,54 +58,48 @@ debug_wpt = null
 target = null
 navigation = null
 
-[node name="body" type="CollisionShape" parent="."]
+[node name="body" type="CollisionShape" parent="." index="0"]
 
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.6, 0 )
 shape = SubResource( 1 )
-trigger = false
-_update_shape_index = 0
+disabled = false
 
-[node name="leg" type="CollisionShape" parent="."]
+[node name="leg" type="CollisionShape" parent="." index="1"]
 
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0 )
 shape = SubResource( 2 )
-trigger = false
-_update_shape_index = 1
+disabled = false
 
-[node name="leg_ray" type="RayCast" parent="."]
+[node name="leg_ray" type="RayCast" parent="." index="2"]
 
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0 )
 enabled = true
+exclude_parent = true
 cast_to = Vector3( 0, -0.4, 0 )
-layer_mask = 1
-type_mask = 15
+collision_mask = 1
 
-[node name="target_ray" type="RayCast" parent="."]
+[node name="target_ray" type="RayCast" parent="." index="3"]
 
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
 enabled = true
+exclude_parent = true
 cast_to = Vector3( 0, 0, -100 )
-layer_mask = 1
-type_mask = 15
+collision_mask = 1
 
-[node name="ray_ground_right" type="RayCast" parent="."]
+[node name="ray_ground_right" type="RayCast" parent="." index="4"]
 
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -0.5 )
 enabled = true
+exclude_parent = true
 cast_to = Vector3( 1.2, -4, -2 )
-layer_mask = 1
-type_mask = 1
+collision_mask = 1
 
-[node name="ray_ground_left" type="RayCast" parent="."]
+[node name="ray_ground_left" type="RayCast" parent="." index="5"]
 
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -0.5 )
 enabled = true
+exclude_parent = true
 cast_to = Vector3( -1.2, -4, -2 )
-layer_mask = 1
-type_mask = 1
+collision_mask = 1
+
+

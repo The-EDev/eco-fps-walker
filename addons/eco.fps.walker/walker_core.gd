@@ -59,6 +59,7 @@ signal walk_speed_changed(speed)
 signal action_changed(name)
 
 func _ready():
+	
 	_init_collision_body()
 	
 	leg_ray.add_exception_rid(get_rid())
