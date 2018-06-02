@@ -1,4 +1,8 @@
-# eco-fps-walker
+
+
+# eco-fps-walker Godot 3 Port
+*This project is being ported to Godot 3. It is still a work in progress so it **does not work** in it's current state.*
+
 Artificial intelligence for characters moving in a 3D terrain in Godot.
 
 As long as there is a map with collision feature (physics body), the bot implementing the AI will be able to move in this map.

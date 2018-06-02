@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=1]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://samples/commons/tileset/tileset.tres" type="MeshLibrary" id=1]
 [ext_resource path="res://addons/eco.fps.walker/basic_guard.tscn" type="PackedScene" id=2]
@@ -48,7 +48,7 @@ bcs/contrast = 1.0
 bcs/saturation = 1.0
 srgb/enabled = false
 
-[sub_resource type="FixedMaterial" id=2]
+[sub_resource type="SpatialMaterial" id=2]
 
 flags/visible = true
 flags/double_sided = false
@@ -85,7 +85,7 @@ textures/glow_tc = 0
 textures/normal_tc = 0
 textures/shade_param_tc = 0
 
-[sub_resource type="FixedMaterial" id=3]
+[sub_resource type="SpatialMaterial" id=3]
 
 flags/visible = true
 flags/double_sided = false
@@ -124,7 +124,42 @@ textures/shade_param_tc = 0
 
 [sub_resource type="GDScript" id=4]
 
-script/source = "extends \"res://addons/eco.fps.walker/basic_guard.gd\"\n\nconst tour=[Vector3(3,4,-1.5),Vector3(-25,4,-1.5),Vector3(-25,4,27),Vector3(3,4,27)]\n\nvar attack_is_finished=false\nvar tour_id=0\n\nfunc _init_fsm_move():\n\tfsm_action.add_link(\"wait\",\"decide\",\"timeout\",[0.2])\n\tfsm_action.add_link(\"move\",\"decide\",\"timeout\",[2])\n\tfsm_action.add_link(\"turn\",\"decide\",\"timeout\",[1])\n\tfsm_action.add_link(\"sleep\",\"decide\",\"timeout\",[3])\n\tfsm_action.add_link(\"decide\",\"move\",\"timeout\",[0.1])\n\tfsm_action.add_link(\"scan\",\"decide\",\"condition\",[self,\"fsm_has_no_target\",false])\n\tfsm_action.add_link(\"scan\",\"sleep\",\"timeout\",[1])\n\nfunc get_waypoint_no_target():\n\tvar tour_point=tour[tour_id]\n\tif tour_point.distance_to(get_global_transform().origin)<WAYPOINT_ERROR_DELTA:\n\t\ttour_id=(tour_id+1) % tour.size()\n\t\ttour_point=tour[tour_id]\n\treturn tour_point\n\nfunc _on_model_attack_ended():\n\tattack_is_finished=true\n\nfunc fsm_attack_finished():\n\tif attack_is_finished:\n\t\tattack_is_finished=false\n\t\treturn true\n\telse:\n\t\treturn false\n\nfunc _on_model_attack_hit():\n\tget_target().hit()\n"
+script/source = "extends \"res://addons/eco.fps.walker/basic_guard.gd\"
+
+const tour=[Vector3(3,4,-1.5),Vector3(-25,4,-1.5),Vector3(-25,4,27),Vector3(3,4,27)]
+
+var attack_is_finished=false
+var tour_id=0
+
+func _init_fsm_move():
+	fsm_action.add_link(\"wait\",\"decide\",\"timeout\",[0.2])
+	fsm_action.add_link(\"move\",\"decide\",\"timeout\",[2])
+	fsm_action.add_link(\"turn\",\"decide\",\"timeout\",[1])
+	fsm_action.add_link(\"sleep\",\"decide\",\"timeout\",[3])
+	fsm_action.add_link(\"decide\",\"move\",\"timeout\",[0.1])
+	fsm_action.add_link(\"scan\",\"decide\",\"condition\",[self,\"fsm_has_no_target\",false])
+	fsm_action.add_link(\"scan\",\"sleep\",\"timeout\",[1])
+
+func get_waypoint_no_target():
+	var tour_point=tour[tour_id]
+	if tour_point.distance_to(get_global_transform().origin)<WAYPOINT_ERROR_DELTA:
+		tour_id=(tour_id+1) % tour.size()
+		tour_point=tour[tour_id]
+	return tour_point
+
+func _on_model_attack_ended():
+	attack_is_finished=true
+
+func fsm_attack_finished():
+	if attack_is_finished:
+		attack_is_finished=false
+		return true
+	else:
+		return false
+
+func _on_model_attack_hit():
+	get_target().hit()
+"
 
 [sub_resource type="BoxShape" id=5]
 
@@ -132,9 +167,12 @@ extents = Vector3( 0.257778, 0.275895, 0.271033 )
 
 [sub_resource type="GDScript" id=6]
 
-script/source = "extends StaticBody\n\nfunc hit():\n\tqueue_free()"
+script/source = "extends StaticBody
 
-[sub_resource type="FixedMaterial" id=7]
+func hit():
+	queue_free()"
+
+[sub_resource type="SpatialMaterial" id=7]
 
 flags/visible = true
 flags/double_sided = false
@@ -180,23 +218,23 @@ _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 environment = SubResource( 1 )
 
-[node name="wpt" type="TestCube" parent="."]
+[node name="wpt" type="MeshInstance" parent="."]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 0.133751, 0, 0, 0, 0.133751, 0, 0, 0, 0.133751, 17.3796, 34.0002, 26.9416 )
+transform = Transform( 0.133751, 0, 0, 0, 0.133751, 0, 0, 0, 0.133751, 17.3796, 34.0002, 26.9416 )
 layers = 1
 geometry/visible = true
-geometry/material_override = SubResource( 2 )
-geometry/cast_shadow = 1
+material_override = SubResource( 2 )
+cast_shadow = 1
 geometry/receive_shadows = true
 geometry/range_begin = 0.0
 geometry/range_end = 0.0
-geometry/extra_cull_margin = 0.0
-geometry/billboard = false
-geometry/billboard_y = false
-geometry/depth_scale = false
-geometry/visible_in_all_rooms = false
-geometry/use_baked_light = false
+extra_cull_margin = 0.0
+use_as_billboard = false
+use_as_y_billboard = false
+use_depth_scale = false
+visible_in_all_rooms = false
+use_in_baked_light = false
 geometry/baked_light_tex_id = 0
 
 [node name="Navigation" type="Navigation" parent="."]
@@ -207,40 +245,45 @@ up_vector = Vector3( 0, 1, 0 )
 [node name="GridMap" type="GridMap" parent="Navigation"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-theme/theme = ExtResource( 1 )
+theme = ExtResource( 1 )
 theme/bake = false
 lighting/bake = false
-cell/size = 2.0
-cell/octant_size = 4
-cell/center_x = true
-cell/center_y = true
-cell/center_z = true
-cell/scale = 1.0
-data = { "cells":IntArray( 1, 1, 1441801, 65523, 1, 9, 65533, 1, 1441801, 65535, 1, 1441801, 1, 3, 1441801, 65523, 3, 9, 65533, 3, 1441801, 65535, 3, 1441801, 1, 5, 9, 65523, 5, 9, 1, 7, 9, 65523, 7, 9, 1, 9, 9, 65523, 9, 9, 1, 11, 9, 65523, 11, 9, 1, 13, 9, 65523, 13, 9, 65525, 13, 9, 65527, 13, 9, 65529, 13, 9, 65531, 13, 9, 65533, 13, 9, 65535, 13, 9, 65529, 15, 9, 1, 65535, 1441801, 65523, 65535, 9, 65525, 65535, 9, 65527, 65535, 9, 65529, 65535, 9, 65531, 65535, 9, 65533, 65535, 1441801, 65535, 65535, 1441801 ) }
-__meta__ = { "_editor_clip_":0, "_editor_floor_":Vector3( 0, 0, 0 ) }
+cell_size = 2.0
+cell_octant_size = 4
+cell_center_x = true
+cell_center_y = true
+cell_center_z = true
+cell_scale = 1.0
+data = {
+"cells": PoolIntArray( 1, 1, 1441801, 65523, 1, 9, 65533, 1, 1441801, 65535, 1, 1441801, 1, 3, 1441801, 65523, 3, 9, 65533, 3, 1441801, 65535, 3, 1441801, 1, 5, 9, 65523, 5, 9, 1, 7, 9, 65523, 7, 9, 1, 9, 9, 65523, 9, 9, 1, 11, 9, 65523, 11, 9, 1, 13, 9, 65523, 13, 9, 65525, 13, 9, 65527, 13, 9, 65529, 13, 9, 65531, 13, 9, 65533, 13, 9, 65535, 13, 9, 65529, 15, 9, 1, 65535, 1441801, 65523, 65535, 9, 65525, 65535, 9, 65527, 65535, 9, 65529, 65535, 9, 65531, 65535, 9, 65533, 65535, 1441801, 65535, 65535, 1441801 )
+}
+__meta__ = {
+"_editor_clip_": 0,
+"_editor_floor_": Vector3( 0, 0, 0 )
+}
 
 [node name="im" type="ImmediateGeometry" parent="."]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 layers = 1
 geometry/visible = true
-geometry/material_override = SubResource( 3 )
-geometry/cast_shadow = 1
+material_override = SubResource( 3 )
+cast_shadow = 1
 geometry/receive_shadows = true
 geometry/range_begin = 0.0
 geometry/range_end = 0.0
-geometry/extra_cull_margin = 0.0
-geometry/billboard = false
-geometry/billboard_y = false
-geometry/depth_scale = false
-geometry/visible_in_all_rooms = false
-geometry/use_baked_light = false
+extra_cull_margin = 0.0
+use_as_billboard = false
+use_as_y_billboard = false
+use_depth_scale = false
+visible_in_all_rooms = false
+use_in_baked_light = false
 geometry/baked_light_tex_id = 0
 
 [node name="npc" parent="." instance=ExtResource( 2 )]
 
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8774, 3.62539, 5.34797 )
-script/script = SubResource( 4 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8774, 3.62539, 5.34797 )
+script = SubResource( 4 )
 walk_speed = 6.0
 turn_speed_deccel = 3.0
 debug_mode = true
@@ -252,10 +295,11 @@ vision_range = 17
 
 [node name="model" parent="npc" instance=ExtResource( 3 )]
 
+
 [node name="Camera" type="Camera" parent="npc"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 0.887853, 0.460128, 0, -0.460128, 0.887853, 0, 5.99762, 5.05145 )
+transform = Transform( 1, 0, 0, 0, 0.887853, 0.460128, 0, -0.460128, 0.887853, 0, 5.99762, 5.05145 )
 projection = 0
 fov = 60.0
 near = 0.1
@@ -270,43 +314,45 @@ v_offset = 0.0
 [node name="Spatial" type="Spatial" parent="."]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 4, 27 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 4, 27 )
 
-[node name="target" type="StaticBody" parent="." groups=[ "prey" ]]
+[node name="target" type="StaticBody" parent="." groups=[
+"prey",
+]]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.3775, 3.80412, 31.5296 )
-input/ray_pickable = true
-input/capture_on_drag = false
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.3775, 3.80412, 31.5296 )
+input_ray_pickable = true
+input_capture_on_drag = false
 shape_count = 1
 shapes/0/shape = SubResource( 5 )
 shapes/0/transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 shapes/0/trigger = false
-collision/layers = 1
-collision/mask = 1
+collision_layer = 1
+collision_mask = 1
 friction = 1.0
 bounce = 0.0
 constant_linear_velocity = Vector3( 0, 0, 0 )
 constant_angular_velocity = Vector3( 0, 0, 0 )
-script/script = SubResource( 6 )
+script = SubResource( 6 )
 
-[node name="target1" type="TestCube" parent="target"]
+[node name="target1" type="MeshInstance" parent="target"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 0.276706, 0, 0, 0, 0.276706, 0, 0, 0, 0.276706, 0, 0, 0 )
+transform = Transform( 0.276706, 0, 0, 0, 0.276706, 0, 0, 0, 0.276706, 0, 0, 0 )
 layers = 1
 geometry/visible = true
-geometry/material_override = SubResource( 7 )
-geometry/cast_shadow = 1
+material_override = SubResource( 7 )
+cast_shadow = 1
 geometry/receive_shadows = true
 geometry/range_begin = 0.0
 geometry/range_end = 0.0
-geometry/extra_cull_margin = 0.0
-geometry/billboard = false
-geometry/billboard_y = false
-geometry/depth_scale = false
-geometry/visible_in_all_rooms = false
-geometry/use_baked_light = false
+extra_cull_margin = 0.0
+use_as_billboard = false
+use_as_y_billboard = false
+use_depth_scale = false
+visible_in_all_rooms = false
+use_in_baked_light = false
 geometry/baked_light_tex_id = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="target"]
@@ -316,12 +362,10 @@ shape = SubResource( 5 )
 trigger = false
 _update_shape_index = 0
 
-[connection signal="action_changed" from="npc" to="npc/model" method="_on_npc_action_changed"]
+[connection signal="action_changed"  from="npc"  to="npc/model" method="_on_npc_action_changed" binds=[  ]]
 
-[connection signal="walk_speed_changed" from="npc" to="npc/model" method="_on_npc_walk_speed_changed"]
+[connection signal="walk_speed_changed"  from="npc"  to="npc/model" method="_on_npc_walk_speed_changed" binds=[  ]]
 
-[connection signal="attack_ended" from="npc/model" to="npc" method="_on_model_attack_ended"]
+[connection signal="attack_ended"  from="npc/model"  to="npc" method="_on_model_attack_ended" binds=[  ]]
 
-[connection signal="attack_hit" from="npc/model" to="npc" method="_on_model_attack_hit"]
-
-
+[connection signal="attack_hit"  from="npc/model"  to="npc" method="_on_model_attack_hit" binds=[  ]]
