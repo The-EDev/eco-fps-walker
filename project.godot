@@ -10,9 +10,9 @@ config_version=3
 
 [application]
 
-run/main_scene="res://samples/demo_1/demo_1.tscn"
+run/main_scene="res://samples/demo_2/demo_2.tscn"
 icon="res://icon.png"
-main_scene="res://samples/demo_9/demo_9.tscn"
+main_scene="res://samples/demo_2/demo_2.tscn"
 name="eco-fps-walker"
 
 [input]

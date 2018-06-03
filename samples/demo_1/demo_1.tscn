@@ -326,7 +326,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[node name="world" type="Spatial" index="0"]
+[node name="world" type="Spatial"]
 
 _sections_unfolded = [ "Transform", "Visibility" ]
 

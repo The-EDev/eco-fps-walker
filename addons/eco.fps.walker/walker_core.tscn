@@ -57,6 +57,10 @@ debug_path = null
 debug_wpt = null
 target = null
 navigation = null
+debug_target_status = null
+debug_state = null
+debug_offset = null
+debug_direction = null
 
 [node name="body" type="CollisionShape" parent="." index="0"]
 

@@ -2,31 +2,32 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Marble.jpg-7379c8682ed7009f96b9161f2ae6b6e9.stex"
+path.s3tc="res://.import/Marble.jpg-7379c8682ed7009f96b9161f2ae6b6e9.s3tc.stex"
+path.etc2="res://.import/Marble.jpg-7379c8682ed7009f96b9161f2ae6b6e9.etc2.stex"
 
 [deps]
 
 source_file="res://samples/commons/textures/Marble.jpg"
 source_md5="4a21f6957db3a242dfbfc1ad1af8d9df"
 
-dest_files=[ "res://.import/Marble.jpg-7379c8682ed7009f96b9161f2ae6b6e9.stex" ]
-dest_md5="c6d75220d5d422862c65555d69cbb192"
+dest_files=[ "res://.import/Marble.jpg-7379c8682ed7009f96b9161f2ae6b6e9.s3tc.stex", "res://.import/Marble.jpg-7379c8682ed7009f96b9161f2ae6b6e9.etc2.stex" ]
+dest_md5="455ae8db3784d131de7c0a87fa3cfbf9"
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/normal_map=0
-flags/repeat=0
+flags/repeat=true
 flags/filter=true
-flags/mipmaps=false
+flags/mipmaps=true
 flags/anisotropic=false
-flags/srgb=2
+flags/srgb=1
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0
