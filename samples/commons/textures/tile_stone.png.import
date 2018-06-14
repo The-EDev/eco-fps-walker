@@ -2,31 +2,32 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tile_stone.png-6b455554f562b049c4a410f5bf9f723d.stex"
+path.s3tc="res://.import/tile_stone.png-6b455554f562b049c4a410f5bf9f723d.s3tc.stex"
+path.etc2="res://.import/tile_stone.png-6b455554f562b049c4a410f5bf9f723d.etc2.stex"
 
 [deps]
 
 source_file="res://samples/commons/textures/tile_stone.png"
 source_md5="6c9d2a3bffa70e19e8d274fa5db41703"
 
-dest_files=[ "res://.import/tile_stone.png-6b455554f562b049c4a410f5bf9f723d.stex" ]
-dest_md5="4f46e0d528b84689d674ef1074df6a83"
+dest_files=[ "res://.import/tile_stone.png-6b455554f562b049c4a410f5bf9f723d.s3tc.stex", "res://.import/tile_stone.png-6b455554f562b049c4a410f5bf9f723d.etc2.stex" ]
+dest_md5="773812add95a771d4ec6b2c34aaf5b5d"
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/normal_map=0
-flags/repeat=0
+flags/repeat=true
 flags/filter=true
-flags/mipmaps=false
+flags/mipmaps=true
 flags/anisotropic=false
-flags/srgb=2
+flags/srgb=1
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0

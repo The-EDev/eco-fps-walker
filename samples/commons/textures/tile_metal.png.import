@@ -2,31 +2,32 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tile_metal.png-22883d1e3befe233cc251902e839efe8.stex"
+path.s3tc="res://.import/tile_metal.png-22883d1e3befe233cc251902e839efe8.s3tc.stex"
+path.etc2="res://.import/tile_metal.png-22883d1e3befe233cc251902e839efe8.etc2.stex"
 
 [deps]
 
 source_file="res://samples/commons/textures/tile_metal.png"
 source_md5="d4cc72eca663853b84fbe8e417c87b5f"
 
-dest_files=[ "res://.import/tile_metal.png-22883d1e3befe233cc251902e839efe8.stex" ]
-dest_md5="8e494f34a5965130d42757b24f0740ff"
+dest_files=[ "res://.import/tile_metal.png-22883d1e3befe233cc251902e839efe8.s3tc.stex", "res://.import/tile_metal.png-22883d1e3befe233cc251902e839efe8.etc2.stex" ]
+dest_md5="53a7044d330c5979898618d6e76b2b67"
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/normal_map=0
-flags/repeat=0
+flags/repeat=true
 flags/filter=true
-flags/mipmaps=false
+flags/mipmaps=true
 flags/anisotropic=false
-flags/srgb=2
+flags/srgb=1
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0

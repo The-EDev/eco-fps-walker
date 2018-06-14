@@ -2,31 +2,32 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tile_drywall.png-56ef9ef7701b4880dc083556edd6dc69.stex"
+path.s3tc="res://.import/tile_drywall.png-56ef9ef7701b4880dc083556edd6dc69.s3tc.stex"
+path.etc2="res://.import/tile_drywall.png-56ef9ef7701b4880dc083556edd6dc69.etc2.stex"
 
 [deps]
 
 source_file="res://samples/commons/textures/tile_drywall.png"
 source_md5="3c0e451d253c5f031390b33ceb10d062"
 
-dest_files=[ "res://.import/tile_drywall.png-56ef9ef7701b4880dc083556edd6dc69.stex" ]
-dest_md5="9c53f3fb81070af786eda44e0d9b6e09"
+dest_files=[ "res://.import/tile_drywall.png-56ef9ef7701b4880dc083556edd6dc69.s3tc.stex", "res://.import/tile_drywall.png-56ef9ef7701b4880dc083556edd6dc69.etc2.stex" ]
+dest_md5="63bc6a722fb9ea17d0ec52f30bc7d7c1"
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/normal_map=0
-flags/repeat=0
+flags/repeat=true
 flags/filter=true
-flags/mipmaps=false
+flags/mipmaps=true
 flags/anisotropic=false
-flags/srgb=2
+flags/srgb=1
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0
