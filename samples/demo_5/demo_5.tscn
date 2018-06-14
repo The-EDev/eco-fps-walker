@@ -95,7 +95,7 @@ adjustment_contrast = 1.0
 adjustment_saturation = 1.0
 _sections_unfolded = [ "Ambient Light" ]
 
-[node name="world" type="Spatial" index="0"]
+[node name="world" type="Spatial"]
 
 [node name="ground" type="StaticBody" parent="." index="0"]
 

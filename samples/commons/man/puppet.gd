@@ -12,6 +12,7 @@ func _ready():
 func play_animation(name):
 	if name=="attack":
 		anim_tree.transition_node_set_current("transition",1)
+		
 		anim_tree.timeseek_node_seek("seek",0)
 	else:
 		anim_tree.transition_node_set_current("transition",0)

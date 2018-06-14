@@ -138,7 +138,7 @@ distance_fade_enable = false
 
 size = Vector2( 1, 1 )
 
-[node name="world" type="Spatial" index="0"]
+[node name="world" type="Spatial"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="0"]
 
