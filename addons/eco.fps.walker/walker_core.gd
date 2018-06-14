@@ -66,7 +66,6 @@ signal walk_speed_changed(speed)
 signal action_changed(name)
 
 func _ready():
-	
 	_init_collision_body()
 	
 	leg_ray.add_exception_rid(get_rid())
@@ -82,6 +81,7 @@ func _init_collision_body():
 	get_node("leg").get_shape().set_radius(leg_length)
 	get_node("leg").set_translation(Vector3(0,leg_length,0))
 	get_node("body").set_translation(Vector3(0,0.5*body_height+body_radius+leg_length,0))
+	# Set raycasts
 	get_node("target_ray").set_translation(Vector3(0,sight_height,0))
 	get_node("ray_ground_right").set_translation(Vector3(0,sight_height,-0.5))
 	get_node("ray_ground_left").set_translation(Vector3(0,sight_height,-0.5))
@@ -125,40 +125,50 @@ func _integrate_forces(state):
 	
 	do_current_action(state)
 	
+func walk_on_ground(state, direction, speed, aim):
+		# is walking on the ground
+	# calculate the impulse vector for horizontal movement. Vertical velocity is kept but not amplified
+	var diff = Vector3() + direction * current_speed - state.get_linear_velocity();
+	var vertdiff = aim[1] * diff.dot(aim[1]); # vertical velocity
+	diff -= vertdiff; # we remove vertical velocity temporarely for working only with horizontal velocity
+	diff = diff.normalized() * clamp(diff.length(), 0, max_accel / state.get_step());
+	diff += vertdiff; # vertical velocity is put back
+	if not no_move :
+		apply_impulse(Vector3(), diff * get_mass())
+		pass
 
-func do_current_action(state):
-	var current_t=get_global_transform()
-	var current_z=current_t.basis.z
-	
-	var aim = current_t.basis;
-	var direction = Vector3();
-	
+func fall():
+	apply_impulse(Vector3(), Vector3() * air_accel * get_mass());
+
+
+func manage_movement_speed():
 	if dynamic_speed and current_speed<walk_speed:
 		current_speed=min(walk_speed,current_speed*max_speed_accel)
 		
+
+func do_current_action(state):
+	# Get walker tranform and direction
+	var self_t=get_global_transform()
+	var self_z=self_t.basis.z
 	
-	# moving
+	var aim = self_t.basis;
+	var direction = Vector3();
+	
+	manage_movement_speed()
+		
+	# movement
 	if current_action.move and not no_move:
 		#move forward
-		direction -= current_z;
+		direction -= self_z;
 	
 	direction = direction.normalized();
 	
 	# ground collision detection
 	if leg_ray.is_colliding():
-		# is walking on the ground
-		# calculate the impulse vector for horizontal movement. Vertical velocity is kept but not amplified
-		var diff = Vector3() + direction * current_speed - state.get_linear_velocity();
-		var vertdiff = aim[1] * diff.dot(aim[1]); # vertical velocity
-		diff -= vertdiff; # we remove vertical velocity temporarely for working only with horizontal velocity
-		diff = diff.normalized() * clamp(diff.length(), 0, max_accel / state.get_step());
-		diff += vertdiff; # vertical velocity is put back
-		if not no_move :
-			apply_impulse(Vector3(), diff * get_mass())
-			pass
+		walk_on_ground(state, direction, current_speed, aim)
 	else:
 		# is falling
-		apply_impulse(Vector3(), Vector3() * air_accel * get_mass());
+		fall();
 	
 	# set rotation
 	
@@ -168,23 +178,23 @@ func do_current_action(state):
 		if current_action.follow_target:
 			# when attacking, the npc always face the target
 			target_z=target_ray.get_global_transform().basis.z
-
 		else:
 			if current_waypoint!=null:
 				var offset=Vector3(0,0,0)
 				if get_target():
 					offset=get_target_offset(get_target())
-				var tt=current_t.looking_at(current_waypoint+offset,UP)
+				var tt=self_t.looking_at(current_waypoint+offset,UP)
 				target_z=tt.basis.z
 			else:
 				target_z=current_direction
 		
-		var vx=Vector2(current_z.x,current_z.z).angle_to(Vector2(target_z.x,target_z.z))
+		var vx=Vector2(self_z.x, self_z.z).angle_to(Vector2(target_z.x, target_z.z))
 		
 		if not current_action.follow_target:
 			
 			var gs_left=check_ground_sensor(ground_sensor_l)
 			var gs_right=check_ground_sensor(ground_sensor_r)
+			
 			var is_new_hole_l=gs_left and !old_sensor_status_l
 			var is_new_hole_r=gs_right and !old_sensor_status_r
 			
@@ -216,18 +226,14 @@ func do_current_action(state):
 				is_temp_waypoint=true
 				is_temp_side_right=is_new_hole_r
 				vx=new_vx
-				var dir=current_z.rotated(UP,new_vx).normalized()*4
+				var dir=self_z.rotated(UP,new_vx).normalized()*4
 				current_waypoint=get_global_transform().origin-dir
 		 
 		# if not aiming at target, turn at constant speed
 		if not (abs(vx)<0.5):
 			vx=sign(vx)
 		
-		state.set_angular_velocity(Vector3(0,vx*-ANGULAR_SPEED,0))
-		
-		
-
-	
+		state.set_angular_velocity(Vector3(0,vx*ANGULAR_SPEED,0))
 	state.integrate_forces();
 	
 	var vel_speed=state.get_linear_velocity().length()/current_speed;
@@ -282,12 +288,12 @@ func get_waypoint_no_target():
 
 func _update_waypoint(target_coord,reached_wpt):
 	
-	var current_t=get_global_transform()
-	var cur_dir=current_t.basis.z
+	var self_t=get_global_transform()
+	var cur_dir=self_t.basis.z
 	
 	#convert start and end points to local
 	var navt=navmesh.get_global_transform()
-	var local_begin=navt.xform_inv(current_t.origin)
+	var local_begin=navt.xform_inv(self_t.origin)
 	var local_end=navt.xform_inv(target_coord)
 	
 	#calculate path
@@ -308,12 +314,12 @@ func _update_waypoint(target_coord,reached_wpt):
 		else:
 			current_waypoint=navt.xform(path[1])
 			
-		if not was_UTurn and was_temp_waypoint and cur_dir.dot(current_t.looking_at(current_waypoint,UP).basis.z)<-0.4:
+		if not was_UTurn and was_temp_waypoint and cur_dir.dot(self_t.looking_at(current_waypoint,UP).basis.z)<-0.4:
 			was_UTurn=true
 			var factor=1
 			if is_temp_side_right:
 				factor=-1
-			current_waypoint=current_t.origin+cur_dir.rotated(UP,factor*PI*0.5)*4
+			current_waypoint=self_t.origin+cur_dir.rotated(UP,factor*PI*0.5)*4
 			is_temp_waypoint=true
 		else:
 			was_UTurn=false
@@ -342,13 +348,13 @@ func _update_waypoint(target_coord,reached_wpt):
 		
 		# check if doing U-Turn
 		
-		var wpt_dir=current_t.looking_at(current_waypoint,UP).basis.z
+		var wpt_dir=self_t.looking_at(current_waypoint,UP).basis.z
 		var a=cur_dir.dot(wpt_dir)
 		
 		if not was_UTurn and cur_dir.dot(wpt_dir)<-0.4:
 			was_UTurn=true
 			
-			current_waypoint=current_t.origin-cur_dir.rotated(UP,PI/16*-sign(current_t.basis.x.dot(wpt_dir)))*6
+			current_waypoint=self_t.origin-cur_dir.rotated(UP,PI/16*-sign(self_t.basis.x.dot(wpt_dir)))*6
 		else:
 			was_UTurn=false
 	

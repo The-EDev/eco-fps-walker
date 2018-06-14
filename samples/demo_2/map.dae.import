@@ -7,7 +7,7 @@ path="res://.import/map.dae-a18ae8b2f76cbf8545bb20d2fb5d1c08.scn"
 [deps]
 
 source_file="res://samples/demo_2/map.dae"
-source_md5="775846e79c41588eada655c7d0172c90"
+source_md5="4d007ba276d908e355c043eb2f76927f"
 
 dest_files=[ "res://.import/map.dae-a18ae8b2f76cbf8545bb20d2fb5d1c08.scn" ]
 dest_md5="168779588b6960a804a8a4d4a2908780"

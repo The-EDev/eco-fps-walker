@@ -39,6 +39,7 @@ linear_damp = -1.0
 angular_velocity = Vector3( 0, 0, 0 )
 angular_damp = -1.0
 script = ExtResource( 1 )
+_sections_unfolded = [ "Angular", "Collision", "Linear" ]
 __meta__ = {
 "__editor_plugin_screen__": "Script"
 }

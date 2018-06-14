@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://samples/demo_2/map.scn" type="PackedScene" id=1]
 [ext_resource path="res://addons/eco.fps.walker/walker_core.tscn" type="PackedScene" id=2]
@@ -133,7 +133,11 @@ uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
 
-[sub_resource type="SpatialMaterial" id=10]
+[sub_resource type="QuadMesh" id=3]
+
+size = Vector2( 1, 1 )
+
+[sub_resource type="SpatialMaterial" id=4]
 
 render_priority = 0
 flags_transparent = false
@@ -189,15 +193,15 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo", "Emission", "Resource" ]
 
-[sub_resource type="CubeMesh" id=11]
+[sub_resource type="CubeMesh" id=5]
 
-material = SubResource( 10 )
+material = SubResource( 4 )
 size = Vector3( 2, 2, 2 )
 subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="SpatialMaterial" id=4]
+[sub_resource type="SpatialMaterial" id=6]
 
 render_priority = 0
 flags_transparent = false
@@ -247,13 +251,6 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
-
-[sub_resource type="CubeMesh" id=6]
-
-size = Vector3( 2, 2, 2 )
-subdivide_width = 0
-subdivide_height = 0
-subdivide_depth = 0
 
 [sub_resource type="CubeMesh" id=7]
 
@@ -262,7 +259,14 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="SpatialMaterial" id=5]
+[sub_resource type="CubeMesh" id=8]
+
+size = Vector3( 2, 2, 2 )
+subdivide_width = 0
+subdivide_height = 0
+subdivide_depth = 0
+
+[sub_resource type="SpatialMaterial" id=9]
 
 render_priority = 0
 flags_transparent = false
@@ -313,21 +317,21 @@ uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
 
-[sub_resource type="CubeMesh" id=8]
+[sub_resource type="CubeMesh" id=10]
 
 size = Vector3( 2, 2, 2 )
 subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="CubeMesh" id=9]
+[sub_resource type="CubeMesh" id=11]
 
 size = Vector3( 2, 2, 2 )
 subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[node name="Spatial" type="Spatial" index="0"]
+[node name="Spatial" type="Spatial"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="0"]
 
@@ -337,15 +341,10 @@ environment = SubResource( 1 )
 
 [node name="npc" parent="." index="2" instance=ExtResource( 2 )]
 
-editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16511, 0.623021, 5.53124 )
 collision_mask = 2
 walk_speed = 5.0
 target = NodePath("../target")
-debug_target_status = null
-debug_state = null
-debug_offset = null
-debug_direction = null
 
 [node name="TestCube" type="MeshInstance" parent="npc" index="6"]
 
@@ -359,19 +358,15 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = null
+mesh = SubResource( 3 )
 skeleton = NodePath("..")
+material/0 = null
 
 [node name="npc1" parent="." index="3" instance=ExtResource( 2 )]
 
-editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.150784, 4.97174, -10.4982 )
 collision_mask = 2
 target = NodePath("../target")
-debug_target_status = null
-debug_state = null
-debug_offset = null
-debug_direction = null
 
 [node name="TestCube" type="MeshInstance" parent="npc1" index="6"]
 
@@ -400,7 +395,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 11 )
+mesh = SubResource( 5 )
 skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Geometry" ]
@@ -412,16 +407,12 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.90681, 0.228985, 5.25886 )
 collision_mask = 2
 mode = 0
 target = NodePath("../target")
-debug_target_status = null
-debug_state = null
-debug_offset = null
-debug_direction = null
 
 [node name="TestCube1" type="MeshInstance" parent="npc 2" index="6"]
 
 transform = Transform( 0.455835, 0, 0, 0, 0.455835, 0, 0, 0, 0.455835, 0, 0.77, 0 )
 layers = 1
-material_override = SubResource( 4 )
+material_override = SubResource( 6 )
 cast_shadow = 1
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -429,7 +420,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 6 )
+mesh = SubResource( 7 )
 skeleton = NodePath("..")
 material/0 = null
 
@@ -440,16 +431,12 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.93404, 4.28915, -42.2446 )
 collision_mask = 2
 mode = 0
 target = NodePath("../target")
-debug_target_status = null
-debug_state = null
-debug_offset = null
-debug_direction = null
 
 [node name="TestCube1" type="MeshInstance" parent="npc4" index="6"]
 
 transform = Transform( 0.455835, 0, 0, 0, 0.455835, 0, 0, 0, 0.455835, 0, 0.77, 0 )
 layers = 1
-material_override = SubResource( 4 )
+material_override = SubResource( 6 )
 cast_shadow = 1
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -457,7 +444,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 7 )
+mesh = SubResource( 8 )
 skeleton = NodePath("..")
 material/0 = null
 
@@ -470,16 +457,12 @@ mode = 0
 walk_speed = 6.0
 turn_speed_deccel = 3.0
 target = NodePath("../target")
-debug_target_status = null
-debug_state = null
-debug_offset = null
-debug_direction = null
 
 [node name="TestCube1" type="MeshInstance" parent="npc3" index="6"]
 
 transform = Transform( 0.455835, 0, 0, 0, 0.455835, 0, 0, 0, 0.455835, 0, 0.77, 0 )
 layers = 1
-material_override = SubResource( 5 )
+material_override = SubResource( 9 )
 cast_shadow = 1
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -487,27 +470,22 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 8 )
+mesh = SubResource( 10 )
 skeleton = NodePath("..")
 material/0 = null
 
 [node name="npc5" parent="." index="8" instance=ExtResource( 2 )]
 
-editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.08853, 4.09617, -43.7195 )
 collision_mask = 2
 mode = 0
 target = NodePath("../target")
-debug_target_status = null
-debug_state = null
-debug_offset = null
-debug_direction = null
 
 [node name="TestCube1" type="MeshInstance" parent="npc5" index="6"]
 
 transform = Transform( 0.455835, 0, 0, 0, 0.455835, 0, 0, 0, 0.455835, 0, 0.77, 0 )
 layers = 1
-material_override = SubResource( 5 )
+material_override = SubResource( 9 )
 cast_shadow = 1
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -515,7 +493,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 9 )
+mesh = SubResource( 11 )
 skeleton = NodePath("..")
 material/0 = null
 
