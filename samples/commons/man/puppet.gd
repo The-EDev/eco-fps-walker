@@ -8,6 +8,7 @@ signal attack_hit
 
 func _ready():
 	anim_tree.set_active(true)
+	
 
 func play_animation(name):
 	if name=="attack":
@@ -28,6 +29,7 @@ func _on_npc_walk_speed_changed( speed ):
 	if speed>0.1:
 		t=1
 	anim_tree.transition_node_set_current("walk",t)
+	
 	#anim_tree.blend2_node_set_amount("walk",speed)
 	pass
 
